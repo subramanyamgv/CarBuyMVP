@@ -48,6 +48,8 @@ public class CarTypesPresenter implements Presenter<CarTypesView> {
 
     public void getCarTypes(int page, int pageSize) {
 
+        carTypesView.showLoading();
+
         fetchCarTypesUsecase.setPage(page);
         fetchCarTypesUsecase.setPageSize(pageSize);
 

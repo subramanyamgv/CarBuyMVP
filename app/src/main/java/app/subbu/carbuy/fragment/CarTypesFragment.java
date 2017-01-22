@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,17 +35,18 @@ import butterknife.ButterKnife;
  * Created by Subramanyam on 22-Jan-2017.
  */
 
-public class CarTypesFragment extends Fragment implements CarTypesView, BaseQuickAdapter.RequestLoadMoreListener {
+public class CarTypesFragment extends Fragment implements CarTypesView,
+        BaseQuickAdapter.RequestLoadMoreListener {
 
     public static final String TAG = "CarTypesFragment";
 
     @Inject
-    CarTypesPresenter mCarTypesPresenter;
+    CarTypesPresenter mPresenter;
 
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
 
-    private CarTypesListAdapter mCarTypesListAdapter;
+    private CarTypesListAdapter mAdapter;
     private int currentPage = 0;
 
     public static CarTypesFragment newInstance() {
@@ -61,7 +63,7 @@ public class CarTypesFragment extends Fragment implements CarTypesView, BaseQuic
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectDependencies();
-        mCarTypesPresenter.onCreate();
+        mPresenter.onCreate();
     }
 
     private void injectDependencies() {
@@ -81,37 +83,44 @@ public class CarTypesFragment extends Fragment implements CarTypesView, BaseQuic
         ButterKnife.bind(this, view);
 
         //Init Adapter
-        mCarTypesListAdapter = new CarTypesListAdapter(new LinkedList<CarType>());
+        mAdapter = new CarTypesListAdapter(null);
 
         //Init List
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mCarTypesListAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         //Init Presenter
-        mCarTypesPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         //Set Load more call back
-        mCarTypesListAdapter.setOnLoadMoreListener(this);
+        mAdapter.setOnLoadMoreListener(this);
+
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CarType carType = (CarType) adapter.getItem(position);
+            }
+        });
 
         return view;
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mCarTypesPresenter.getCarTypes(currentPage + 1, Repository.DEFAULT_PAGE_SIZE);
+        mPresenter.getCarTypes(currentPage + 1, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mCarTypesPresenter.onStart();
-        mCarTypesPresenter.getCarTypes(0, Repository.DEFAULT_PAGE_SIZE);
+        mPresenter.onStart();
+        mPresenter.getCarTypes(0, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mCarTypesPresenter.onStop();
+        mPresenter.onStop();
     }
 
     public void addCarTypes(CarTypes carTypes) {
@@ -130,12 +139,12 @@ public class CarTypesFragment extends Fragment implements CarTypesView, BaseQuic
 
         currentPage = carTypes.getPage();
 
-        mCarTypesListAdapter.addData(data);
+        mAdapter.addData(data);
 
-        if (data.size() > 0)
-            mCarTypesListAdapter.loadMoreComplete();
+        if (currentPage == carTypes.getTotalPageCount())
+            mAdapter.loadMoreEnd(true);
         else
-            mCarTypesListAdapter.loadMoreEnd(true);
+            mAdapter.loadMoreComplete();
     }
 
     @Override
@@ -143,7 +152,7 @@ public class CarTypesFragment extends Fragment implements CarTypesView, BaseQuic
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                mCarTypesListAdapter.setEmptyView(R.layout.loading_view,
+                mAdapter.setEmptyView(R.layout.loading_view,
                         (ViewGroup) mRecyclerView.getParent());
             }
         };
@@ -156,7 +165,7 @@ public class CarTypesFragment extends Fragment implements CarTypesView, BaseQuic
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                mCarTypesListAdapter.setEmptyView(R.layout.empty_view,
+                mAdapter.setEmptyView(R.layout.empty_view,
                         (ViewGroup) mRecyclerView.getParent());
             }
         };
