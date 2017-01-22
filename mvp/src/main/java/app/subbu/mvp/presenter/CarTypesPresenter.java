@@ -46,7 +46,10 @@ public class CarTypesPresenter implements Presenter<CarTypesView> {
         this.carTypesView = view;
     }
 
-    public void getCarTypes() {
+    public void getCarTypes(int page, int pageSize) {
+
+        fetchCarTypesUsecase.setPage(page);
+        fetchCarTypesUsecase.setPageSize(pageSize);
 
         fetchCarTypesUsecase.execute().subscribeOn(Schedulers.io())
                 .subscribe(new Observer<CarTypes>() {

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "app.subbu.auto1"
+        applicationId "app.subbu.carbuy"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -26,6 +26,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':mvp')
@@ -33,6 +39,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     testCompile 'junit:junit:4.12'
 
     //Butterknife
@@ -51,4 +58,6 @@ dependencies {
     //RxAndroid
     compile group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.0.1'
 
+    //RecyclerView Adapter
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.7.8'
 }

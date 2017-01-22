@@ -6,5 +6,9 @@ package app.subbu.mvp.view;
 
 public interface IView {
 
+    void showLoading();
+
+    void showEmpty();
+
     void showError(Throwable e);
 }

@@ -1,6 +1,7 @@
 package app.subbu.carbuy.injector.component;
 
-import app.subbu.carbuy.activity.CarSelectionActivity;
+import app.subbu.carbuy.activity.CarTypesDialogActivity;
+import app.subbu.carbuy.fragment.CarTypesFragment;
 import app.subbu.carbuy.injector.module.CarSelectionModule;
 import app.subbu.carbuy.injector.scope.PerActivity;
 import dagger.Component;
@@ -13,5 +14,6 @@ import dagger.Component;
         modules = {CarSelectionModule.class})
 public interface CarSelectionComponent {
 
-    void inject(CarSelectionActivity activity);
+    void inject(CarTypesDialogActivity activity);
+    void inject(CarTypesFragment fragment);
 }
