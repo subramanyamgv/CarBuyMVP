@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -27,6 +28,7 @@ import app.subbu.carbuy.adapter.MainTypesListAdapter;
 import app.subbu.carbuy.entity.Manufacturer;
 import app.subbu.carbuy.entity.Model;
 import app.subbu.carbuy.injector.component.CarSelectionComponent;
+import app.subbu.carbuy.utils.ErrorUtils;
 import app.subbu.mvp.model.MainTypes;
 import app.subbu.mvp.presenter.MainTypesPresenter;
 import app.subbu.mvp.view.MainTypesView;
@@ -198,7 +200,22 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
 
     @Override
     public void showError(Throwable e) {
+        final ErrorUtils.ErrorType error = ErrorUtils.getErrorType(e);
 
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                mAdapter.setEmptyView(R.layout.error_view,
+                        (ViewGroup) mRecyclerView.getParent());
+
+                ((TextView)mAdapter.getEmptyView()
+                        .findViewById(R.id.error_text))
+                        .setText(error.getRes());
+            }
+        };
+
+        getActivity().runOnUiThread(runnable);
     }
 
     public void setManufacturer(Manufacturer manufacturer) {

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -28,6 +29,7 @@ import app.subbu.carbuy.entity.BuiltDate;
 import app.subbu.carbuy.entity.Manufacturer;
 import app.subbu.carbuy.entity.Model;
 import app.subbu.carbuy.injector.component.CarSelectionComponent;
+import app.subbu.carbuy.utils.ErrorUtils;
 import app.subbu.mvp.model.BuiltDates;
 import app.subbu.mvp.presenter.BuiltDatesPresenter;
 import app.subbu.mvp.view.BuiltDatesView;
@@ -203,7 +205,22 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
 
     @Override
     public void showError(Throwable e) {
+        final ErrorUtils.ErrorType error = ErrorUtils.getErrorType(e);
 
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                mAdapter.setEmptyView(R.layout.error_view,
+                        (ViewGroup) mRecyclerView.getParent());
+
+                ((TextView)mAdapter.getEmptyView()
+                        .findViewById(R.id.error_text))
+                        .setText(error.getRes());
+            }
+        };
+
+        getActivity().runOnUiThread(runnable);
     }
 
     public void setManufacturer(Manufacturer manufacturer) {

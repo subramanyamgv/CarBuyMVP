@@ -2,7 +2,7 @@
     <string name="app_name">CarBuy</string>
 
     <string name="loading">Loading</string>
-    <string name="nodata">No data!</string>
+    <string name="nodata">No Data!</string>
 
     <string name="car_type">Manufacturer</string>
     <string name="main_type">Model</string>
@@ -10,14 +10,18 @@
 
     <string name="select_car">Select Car</string>
 
-    <string name="select_manufacturer">Select manufacturer</string>
-    <string name="select_model">Select model</string>
-    <string name="select_year">Select year</string>
+    <string name="select_manufacturer">Select Manufacturer</string>
+    <string name="select_model">Select Model</string>
+    <string name="select_year">Select Year</string>
 
     <string name="no_car_types">Car Types Empty</string>
     <string name="no_main_types">Main Types Empty</string>
     <string name="no_built_dates">Built Dates Empty</string>
 
     <string name="summary">Summary</string>
+
+    <string name="error_network">Network Unavailable</string>
+    <string name="error_server">Server Unavailable</string>
+    <string name="error_unknown">Unknown Error</string>
 
 </resources>
