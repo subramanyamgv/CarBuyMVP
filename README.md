@@ -19,11 +19,12 @@ Java module with no Android dependencies. It contains following packages:
 - `.activity` - Android activities, they can be treated as MVP Views by implementing corresponding `View` interfaces from `mvp` gradle module.
 - `.fragment` - Android fragments. Like activities, they can be treated as Views.
 - `.adapter` - adapters for RecyclerViews
-- `.repository/networ` - implementation of mvp `Repository` interface with Retrofit 2 library.
+- `.repository/network` - implementation of mvp `Repository` interface with Retrofit 2 library.
 - `.injector` - Dagger 2 related classes
 	- `.scope` - Two custom scopes are defined: `PerApplication` and `PerActivity`.
 	- `.module` - `ApplicationModule` and `NetworkModule` are `PerApplication` defined modules. `NetworkModule` provides implementation for `Repository` interface. The `CarSelectionModule` module have `PerActivity` scope and provides injections for presenters and use cases defined in `mvp` gradle module.
 	- `.component` - contains `dagger` components. `ApplicationComponent` provides `PerApplication` scoped dependencies. Rest of components provide `PerActivity` scoped dependencies.
+- `.entity` - entities to pass data for RecyclerViews adapters
 
 ## Third Party Libraries
 * [Butterknife](https://github.com/JakeWharton/butterknife)
