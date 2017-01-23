@@ -32,4 +32,5 @@ Java module with no Android dependencies. It contains following packages:
 * [RxJava2](https://github.com/ReactiveX/RxJava)
 * [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 
-
+## LICENSE
+Provided under [MIT License](LICENSE)
