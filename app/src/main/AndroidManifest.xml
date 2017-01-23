@@ -20,8 +20,18 @@
         </activity>
 
         <activity android:name=".activity.CarTypesDialogActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/select_car_type"
+            android:theme="@style/AppTheme.Dialog" />
+
+        <activity android:name=".activity.MainTypesDialogActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/select_main_type"
+            android:theme="@style/AppTheme.Dialog" />
+
+        <activity android:name=".activity.BuiltDatesDialogActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/select_built_date"
             android:theme="@style/AppTheme.Dialog" />
 
     </application>

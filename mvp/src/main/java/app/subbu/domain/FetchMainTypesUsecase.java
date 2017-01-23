@@ -13,7 +13,7 @@ public class FetchMainTypesUsecase implements Usecase<MainTypes> {
     private Repository repository;
     private int page;
     private int pageSize;
-    private int manufacturer;
+    private String manufacturerId;
 
     public FetchMainTypesUsecase(Repository repository) {
         this.repository = repository;
@@ -28,12 +28,12 @@ public class FetchMainTypesUsecase implements Usecase<MainTypes> {
         this.pageSize = pageSize;
     }
 
-    public void setManufacturer(int manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setManufacturerId(String manufacturerId) {
+        this.manufacturerId = manufacturerId;
     }
 
     @Override
     public Observable<MainTypes> execute() {
-        return repository.getMainTypes(manufacturer, page, pageSize);
+        return repository.getMainTypes(manufacturerId, page, pageSize);
     }
 }

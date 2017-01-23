@@ -46,7 +46,14 @@ public class BuiltDatesPresenter implements Presenter<BuiltDatesView> {
         this.builtDatesView = view;
     }
 
-    public void getCarTypes() {
+    public void getBuiltDates(String mainType, String manufacturerId, int page, int pageSize) {
+
+        builtDatesView.showLoading();
+
+        fetchBuildDatesUsecase.setPage(page);
+        fetchBuildDatesUsecase.setPageSize(pageSize);
+        fetchBuildDatesUsecase.setManufacturerId(manufacturerId);
+        fetchBuildDatesUsecase.setMainType(mainType);
 
         fetchBuildDatesUsecase.execute().subscribeOn(Schedulers.io())
                 .subscribe(new Observer<BuiltDates>() {

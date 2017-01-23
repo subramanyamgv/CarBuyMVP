@@ -21,14 +21,16 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import app.subbu.carbuy.R;
-import app.subbu.carbuy.activity.CarTypesDialogActivity;
+import app.subbu.carbuy.activity.BuiltDatesDialogActivity;
 import app.subbu.carbuy.activity.EntitySelectionListener;
-import app.subbu.carbuy.adapter.CarTypesListAdapter;
+import app.subbu.carbuy.adapter.BuiltDateListAdapter;
+import app.subbu.carbuy.entity.BuiltDate;
 import app.subbu.carbuy.entity.Manufacturer;
+import app.subbu.carbuy.entity.Model;
 import app.subbu.carbuy.injector.component.CarSelectionComponent;
-import app.subbu.mvp.model.CarTypes;
-import app.subbu.mvp.presenter.CarTypesPresenter;
-import app.subbu.mvp.view.CarTypesView;
+import app.subbu.mvp.model.BuiltDates;
+import app.subbu.mvp.presenter.BuiltDatesPresenter;
+import app.subbu.mvp.view.BuiltDatesView;
 import app.subbu.repository.Repository;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,27 +39,31 @@ import butterknife.ButterKnife;
  * Created by Subramanyam on 22-Jan-2017.
  */
 
-public class CarTypesFragment extends Fragment implements CarTypesView,
+public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
         BaseQuickAdapter.RequestLoadMoreListener {
 
-    public static final String TAG = "CarTypesFragment";
+    public static final String TAG = "BuiltDatesFragment";
 
     @Inject
-    CarTypesPresenter mPresenter;
+    BuiltDatesPresenter mPresenter;
 
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
 
-    private EntitySelectionListener<Manufacturer> selectionListener;
-    private CarTypesListAdapter mAdapter;
+    private EntitySelectionListener<BuiltDate> selectionListener;
+    private BuiltDateListAdapter mAdapter;
+    private Manufacturer mManufacturer;
+    private Model mModel;
     private int currentPage = 0;
 
-    public static CarTypesFragment newInstance() {
-        return new CarTypesFragment();
+    public static BuiltDatesFragment newInstance() {
+        return new BuiltDatesFragment();
     }
 
-    public static void start(int contentViewId, FragmentManager fragmentManager) {
-        CarTypesFragment fragment = newInstance();
+    public static void start(int contentViewId, FragmentManager fragmentManager, Manufacturer manufacturer, Model model) {
+        BuiltDatesFragment fragment = newInstance();
+        fragment.setManufacturer(manufacturer);
+        fragment.setModel(model);
         fragmentManager.beginTransaction().replace(contentViewId, fragment,
                 TAG).commit();
     }
@@ -71,10 +77,21 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
 
     private void injectDependencies() {
 
-        if (getActivity() instanceof CarTypesDialogActivity) {
-            CarTypesDialogActivity activity = (CarTypesDialogActivity) getActivity();
+        if (getActivity() instanceof BuiltDatesDialogActivity) {
+            BuiltDatesDialogActivity activity = (BuiltDatesDialogActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
             carSelectionComponent.inject(this);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            selectionListener = (EntitySelectionListener)getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " should implement EntitySelectionListener");
         }
     }
 
@@ -85,7 +102,7 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         ButterKnife.bind(this, view);
 
         //Init Adapter
-        mAdapter = new CarTypesListAdapter(null);
+        mAdapter = new BuiltDateListAdapter(null);
 
         //Init List
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -100,8 +117,8 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Manufacturer manufacturer = (Manufacturer) adapter.getItem(position);
-                selectionListener.onEntitySelected(manufacturer);
+                BuiltDate builtDate = (BuiltDate) adapter.getItem(position);
+                selectionListener.onEntitySelected(builtDate);
             }
         });
 
@@ -110,14 +127,16 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
 
     @Override
     public void onLoadMoreRequested() {
-        mPresenter.getCarTypes(currentPage + 1, Repository.DEFAULT_PAGE_SIZE);
+        mPresenter.getBuiltDates(mModel.getModelId(), mManufacturer.getManufacturerId(),
+                currentPage + 1, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mPresenter.onStart();
-        mPresenter.getCarTypes(0, Repository.DEFAULT_PAGE_SIZE);
+        mPresenter.getBuiltDates(mModel.getModelId(), mManufacturer.getManufacturerId(),
+                0, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override
@@ -126,36 +145,25 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         mPresenter.onStop();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void addBuiltDates(BuiltDates builtDates) {
 
-        try {
-            selectionListener = (EntitySelectionListener)getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " should implement EntitySelectionListener");
-        }
-    }
-
-    public void addCarTypes(CarTypes carTypes) {
-
-        List<Manufacturer> data = new LinkedList<>();
+        List<BuiltDate> data = new LinkedList<>();
 
         int itemType = 0;
 
-        for (Map.Entry<String, String> entry : carTypes.getWkda().entrySet()) {
+        for (Map.Entry<String, String> entry : builtDates.getWkda().entrySet()) {
 
-            Manufacturer carType = new Manufacturer(itemType, entry.getKey(), entry.getValue());
-            data.add(carType);
+            BuiltDate builtDate = new BuiltDate(itemType, entry.getKey());
+            data.add(builtDate);
 
             itemType = itemType ^ 1;
         }
 
-        currentPage = carTypes.getPage();
+        currentPage = builtDates.getPage();
 
         mAdapter.addData(data);
 
-        if (currentPage == carTypes.getTotalPageCount())
+        if (currentPage == builtDates.getTotalPageCount())
             mAdapter.loadMoreEnd(true);
         else
             mAdapter.loadMoreComplete();
@@ -188,11 +196,11 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     }
 
     @Override
-    public void showCarTypes(final CarTypes carTypes) {
+    public void showBuiltDates(final BuiltDates builtDates) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                addCarTypes(carTypes);
+                addBuiltDates(builtDates);
             }
         };
 
@@ -202,5 +210,13 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     @Override
     public void showError(Throwable e) {
 
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.mManufacturer = manufacturer;
+    }
+
+    public void setModel(Model model) {
+        this.mModel = model;
     }
 }

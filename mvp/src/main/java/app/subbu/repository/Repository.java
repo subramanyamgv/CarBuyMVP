@@ -15,7 +15,7 @@ public interface Repository {
 
     public Observable<CarTypes> getCarTypes(int page, int pageSize);
 
-    public Observable<MainTypes> getMainTypes(int manufacturer, int page, int pageSize);
+    public Observable<MainTypes> getMainTypes(String manufacturer, int page, int pageSize);
 
-    public Observable<BuiltDates> getBuildDates(String mainType, int manufacturer, int page, int pageSize);
+    public Observable<BuiltDates> getBuildDates(String mainType, String manufacturer, int page, int pageSize);
 }

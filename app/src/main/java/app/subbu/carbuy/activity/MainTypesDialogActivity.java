@@ -8,7 +8,8 @@ import android.view.MenuItem;
 
 import app.subbu.carbuy.R;
 import app.subbu.carbuy.entity.Manufacturer;
-import app.subbu.carbuy.fragment.CarTypesFragment;
+import app.subbu.carbuy.entity.Model;
+import app.subbu.carbuy.fragment.MainTypesFragment;
 import app.subbu.carbuy.injector.component.CarSelectionComponent;
 import app.subbu.carbuy.injector.component.DaggerCarSelectionComponent;
 import app.subbu.carbuy.injector.module.CarSelectionModule;
@@ -19,14 +20,15 @@ import butterknife.ButterKnife;
  * Created by Subramanyam on 22-Jan-2017.
  */
 
-public class CarTypesDialogActivity extends BaseActivity implements EntitySelectionListener<Manufacturer> {
+public class MainTypesDialogActivity extends BaseActivity implements EntitySelectionListener<Model> {
 
-    public static final String INTENT_EXTRA = "manufacturer";
+    public static final String INTENT_EXTRA = "model";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     private CarSelectionComponent mCarSelectionComponent;
+    private Manufacturer mManufacturer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,12 +41,24 @@ public class CarTypesDialogActivity extends BaseActivity implements EntitySelect
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (savedInstanceState != null) {
+            mManufacturer = savedInstanceState.getParcelable(CarTypesDialogActivity.INTENT_EXTRA);
+        } else {
+            mManufacturer = getIntent().getParcelableExtra(CarTypesDialogActivity.INTENT_EXTRA);
+        }
+
         mCarSelectionComponent = DaggerCarSelectionComponent.builder()
                 .applicationComponent(mAppComponent)
                 .carSelectionModule(new CarSelectionModule())
                 .build();
 
-        CarTypesFragment.start(R.id.container, getSupportFragmentManager());
+        MainTypesFragment.start(R.id.container, getSupportFragmentManager(), mManufacturer);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(CarTypesDialogActivity.INTENT_EXTRA, mManufacturer);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -61,7 +75,7 @@ public class CarTypesDialogActivity extends BaseActivity implements EntitySelect
     }
 
     @Override
-    public void onEntitySelected(Manufacturer data) {
+    public void onEntitySelected(Model data) {
         Intent result = new Intent();
         result.putExtra(INTENT_EXTRA, data);
         setResult(RESULT_OK, result);

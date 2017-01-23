@@ -9,13 +9,13 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  * Created by Subramanyam on 22-Jan-2017.
  */
 
-public class CarType implements MultiItemEntity, Parcelable {
+public class Manufacturer implements MultiItemEntity, Parcelable {
 
     private int itemType;
     private String manufacturerId;
     private String manufacturerName;
 
-    public CarType(int itemType, String manufacturerId, String manufacturerName) {
+    public Manufacturer(int itemType, String manufacturerId, String manufacturerName) {
         this.itemType = itemType;
         this.manufacturerId = manufacturerId;
         this.manufacturerName = manufacturerName;
@@ -34,7 +34,7 @@ public class CarType implements MultiItemEntity, Parcelable {
         return itemType;
     }
 
-    protected CarType(Parcel in) {
+    protected Manufacturer(Parcel in) {
         itemType = in.readInt();
         manufacturerId = in.readString();
         manufacturerName = in.readString();
@@ -53,15 +53,15 @@ public class CarType implements MultiItemEntity, Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CarType> CREATOR = new Parcelable.Creator<CarType>() {
+    public static final Parcelable.Creator<Manufacturer> CREATOR = new Parcelable.Creator<Manufacturer>() {
         @Override
-        public CarType createFromParcel(Parcel in) {
-            return new CarType(in);
+        public Manufacturer createFromParcel(Parcel in) {
+            return new Manufacturer(in);
         }
 
         @Override
-        public CarType[] newArray(int size) {
-            return new CarType[size];
+        public Manufacturer[] newArray(int size) {
+            return new Manufacturer[size];
         }
     };
 }

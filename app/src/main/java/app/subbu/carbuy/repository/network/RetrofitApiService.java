@@ -23,13 +23,13 @@ public interface RetrofitApiService {
                                      @Query("pageSize") int pageSize);
 
     @GET(MAIN_TYPES_URL)
-    Observable<MainTypes> getMainTypes(@Query("manufacturer") int manufacturer,
+    Observable<MainTypes> getMainTypes(@Query("manufacturer") String manufacturer,
                                        @Query("page") int page,
                                        @Query("pageSize") int pageSize);
 
     @GET(BUILT_DATES_URL)
     Observable<BuiltDates> getBuildDates(@Query(value = "main-type", encoded = true) String mainType,
-                                         @Query("manufacturer") int manufacturer,
+                                         @Query("manufacturer") String manufacturer,
                                          @Query("page") int page,
                                          @Query("pageSize") int pageSize);
 

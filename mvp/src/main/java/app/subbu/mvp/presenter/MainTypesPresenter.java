@@ -46,7 +46,13 @@ public class MainTypesPresenter implements Presenter<MainTypesView> {
         this.mainTypesView = view;
     }
 
-    public void getCarTypes() {
+    public void getMainTypes(String manufacturerId, int page, int pageSize) {
+
+        mainTypesView.showLoading();
+
+        fetchMainTypesUsecase.setPage(page);
+        fetchMainTypesUsecase.setPageSize(pageSize);
+        fetchMainTypesUsecase.setManufacturerId(manufacturerId);
 
         fetchMainTypesUsecase.execute().subscribeOn(Schedulers.io())
                 .subscribe(new Observer<MainTypes>() {

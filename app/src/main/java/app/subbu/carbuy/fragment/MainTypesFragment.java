@@ -21,14 +21,15 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import app.subbu.carbuy.R;
-import app.subbu.carbuy.activity.CarTypesDialogActivity;
 import app.subbu.carbuy.activity.EntitySelectionListener;
-import app.subbu.carbuy.adapter.CarTypesListAdapter;
+import app.subbu.carbuy.activity.MainTypesDialogActivity;
+import app.subbu.carbuy.adapter.MainTypesListAdapter;
 import app.subbu.carbuy.entity.Manufacturer;
+import app.subbu.carbuy.entity.Model;
 import app.subbu.carbuy.injector.component.CarSelectionComponent;
-import app.subbu.mvp.model.CarTypes;
-import app.subbu.mvp.presenter.CarTypesPresenter;
-import app.subbu.mvp.view.CarTypesView;
+import app.subbu.mvp.model.MainTypes;
+import app.subbu.mvp.presenter.MainTypesPresenter;
+import app.subbu.mvp.view.MainTypesView;
 import app.subbu.repository.Repository;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,27 +38,29 @@ import butterknife.ButterKnife;
  * Created by Subramanyam on 22-Jan-2017.
  */
 
-public class CarTypesFragment extends Fragment implements CarTypesView,
+public class MainTypesFragment extends Fragment implements MainTypesView,
         BaseQuickAdapter.RequestLoadMoreListener {
 
-    public static final String TAG = "CarTypesFragment";
+    public static final String TAG = "MainTypesFragment";
 
     @Inject
-    CarTypesPresenter mPresenter;
+    MainTypesPresenter mPresenter;
 
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
 
-    private EntitySelectionListener<Manufacturer> selectionListener;
-    private CarTypesListAdapter mAdapter;
+    private EntitySelectionListener<Model> mSelectionListener;
+    private MainTypesListAdapter mAdapter;
+    private Manufacturer mManufacturer;
     private int currentPage = 0;
 
-    public static CarTypesFragment newInstance() {
-        return new CarTypesFragment();
+    public static MainTypesFragment newInstance() {
+        return new MainTypesFragment();
     }
 
-    public static void start(int contentViewId, FragmentManager fragmentManager) {
-        CarTypesFragment fragment = newInstance();
+    public static void start(int contentViewId, FragmentManager fragmentManager, Manufacturer manufacturer) {
+        MainTypesFragment fragment = newInstance();
+        fragment.setManufacturer(manufacturer);
         fragmentManager.beginTransaction().replace(contentViewId, fragment,
                 TAG).commit();
     }
@@ -71,8 +74,8 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
 
     private void injectDependencies() {
 
-        if (getActivity() instanceof CarTypesDialogActivity) {
-            CarTypesDialogActivity activity = (CarTypesDialogActivity) getActivity();
+        if (getActivity() instanceof MainTypesDialogActivity) {
+            MainTypesDialogActivity activity = (MainTypesDialogActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
             carSelectionComponent.inject(this);
         }
@@ -85,7 +88,7 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         ButterKnife.bind(this, view);
 
         //Init Adapter
-        mAdapter = new CarTypesListAdapter(null);
+        mAdapter = new MainTypesListAdapter(null);
 
         //Init List
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -100,8 +103,8 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Manufacturer manufacturer = (Manufacturer) adapter.getItem(position);
-                selectionListener.onEntitySelected(manufacturer);
+                Model model = (Model) adapter.getItem(position);
+                mSelectionListener.onEntitySelected(model);
             }
         });
 
@@ -110,14 +113,15 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
 
     @Override
     public void onLoadMoreRequested() {
-        mPresenter.getCarTypes(currentPage + 1, Repository.DEFAULT_PAGE_SIZE);
+        mPresenter.getMainTypes(mManufacturer.getManufacturerId(),
+                currentPage + 1, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mPresenter.onStart();
-        mPresenter.getCarTypes(0, Repository.DEFAULT_PAGE_SIZE);
+        mPresenter.getMainTypes(mManufacturer.getManufacturerId(), 0, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override
@@ -131,31 +135,31 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         super.onAttach(context);
 
         try {
-            selectionListener = (EntitySelectionListener)getActivity();
+            mSelectionListener = (EntitySelectionListener)getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " should implement EntitySelectionListener");
         }
     }
 
-    public void addCarTypes(CarTypes carTypes) {
+    public void addMainTypes(MainTypes mainTypes) {
 
-        List<Manufacturer> data = new LinkedList<>();
+        List<Model> data = new LinkedList<>();
 
         int itemType = 0;
 
-        for (Map.Entry<String, String> entry : carTypes.getWkda().entrySet()) {
+        for (Map.Entry<String, String> entry : mainTypes.getWkda().entrySet()) {
 
-            Manufacturer carType = new Manufacturer(itemType, entry.getKey(), entry.getValue());
-            data.add(carType);
+            Model model = new Model(itemType, entry.getKey(), entry.getValue());
+            data.add(model);
 
             itemType = itemType ^ 1;
         }
 
-        currentPage = carTypes.getPage();
+        currentPage = mainTypes.getPage();
 
         mAdapter.addData(data);
 
-        if (currentPage == carTypes.getTotalPageCount())
+        if (currentPage == mainTypes.getTotalPageCount())
             mAdapter.loadMoreEnd(true);
         else
             mAdapter.loadMoreComplete();
@@ -188,11 +192,11 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     }
 
     @Override
-    public void showCarTypes(final CarTypes carTypes) {
+    public void showMainTypes(final MainTypes mainTypes) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                addCarTypes(carTypes);
+                addMainTypes(mainTypes);
             }
         };
 
@@ -202,5 +206,9 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     @Override
     public void showError(Throwable e) {
 
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.mManufacturer = manufacturer;
     }
 }

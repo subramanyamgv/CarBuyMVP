@@ -25,12 +25,12 @@ public class RetrofitRestRepository implements Repository {
     }
 
     @Override
-    public Observable<MainTypes> getMainTypes(int manufacturer, int page, int pageSize) {
+    public Observable<MainTypes> getMainTypes(String manufacturer, int page, int pageSize) {
         return apiService.getMainTypes(manufacturer, page, pageSize);
     }
 
     @Override
-    public Observable<BuiltDates> getBuildDates(String mainType, int manufacturer, int page, int pageSize) {
+    public Observable<BuiltDates> getBuildDates(String mainType, String manufacturer, int page, int pageSize) {
         return apiService.getBuildDates(mainType, manufacturer, page, pageSize);
     }
 }

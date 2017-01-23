@@ -13,7 +13,7 @@ public class FetchBuildDatesUsecase implements Usecase<BuiltDates> {
     private Repository repository;
     private int page;
     private int pageSize;
-    private int manufacturer;
+    private String manufacturerId;
     private String mainType;
 
     public FetchBuildDatesUsecase(Repository repository) {
@@ -29,8 +29,8 @@ public class FetchBuildDatesUsecase implements Usecase<BuiltDates> {
         this.pageSize = pageSize;
     }
 
-    public void setManufacturer(int manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setManufacturerId(String manufacturerId) {
+        this.manufacturerId = manufacturerId;
     }
 
     public void setMainType(String mainType) {
@@ -39,6 +39,6 @@ public class FetchBuildDatesUsecase implements Usecase<BuiltDates> {
 
     @Override
     public Observable<BuiltDates> execute() {
-        return repository.getBuildDates(mainType, manufacturer, page, pageSize);
+        return repository.getBuildDates(mainType, manufacturerId, page, pageSize);
     }
 }
