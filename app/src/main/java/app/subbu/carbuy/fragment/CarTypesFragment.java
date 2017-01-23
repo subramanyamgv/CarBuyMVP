@@ -70,7 +70,6 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     }
 
     private void injectDependencies() {
-
         if (getActivity() instanceof CarTypesDialogActivity) {
             CarTypesDialogActivity activity = (CarTypesDialogActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
@@ -85,7 +84,7 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
         ButterKnife.bind(this, view);
 
         //Init Adapter
-        mAdapter = new CarTypesListAdapter(null);
+        mAdapter = new CarTypesListAdapter(new LinkedList<Manufacturer>());
 
         //Init List
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -129,7 +128,6 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             selectionListener = (EntitySelectionListener)getActivity();
         } catch (ClassCastException e) {
@@ -140,19 +138,15 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     public void addCarTypes(CarTypes carTypes) {
 
         List<Manufacturer> data = new LinkedList<>();
-
         int itemType = 0;
 
         for (Map.Entry<String, String> entry : carTypes.getWkda().entrySet()) {
-
             Manufacturer carType = new Manufacturer(itemType, entry.getKey(), entry.getValue());
             data.add(carType);
-
             itemType = itemType ^ 1;
         }
 
         currentPage = carTypes.getPage();
-
         mAdapter.addData(data);
 
         if (currentPage == carTypes.getTotalPageCount())

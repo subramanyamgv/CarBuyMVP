@@ -73,7 +73,6 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
     }
 
     private void injectDependencies() {
-
         if (getActivity() instanceof MainTypesDialogActivity) {
             MainTypesDialogActivity activity = (MainTypesDialogActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
@@ -88,7 +87,7 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
         ButterKnife.bind(this, view);
 
         //Init Adapter
-        mAdapter = new MainTypesListAdapter(null);
+        mAdapter = new MainTypesListAdapter(new LinkedList<Model>());
 
         //Init List
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -133,7 +132,6 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             mSelectionListener = (EntitySelectionListener)getActivity();
         } catch (ClassCastException e) {
@@ -142,21 +140,16 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
     }
 
     public void addMainTypes(MainTypes mainTypes) {
-
         List<Model> data = new LinkedList<>();
-
         int itemType = 0;
 
         for (Map.Entry<String, String> entry : mainTypes.getWkda().entrySet()) {
-
             Model model = new Model(itemType, entry.getKey(), entry.getValue());
             data.add(model);
-
             itemType = itemType ^ 1;
         }
 
         currentPage = mainTypes.getPage();
-
         mAdapter.addData(data);
 
         if (currentPage == mainTypes.getTotalPageCount())

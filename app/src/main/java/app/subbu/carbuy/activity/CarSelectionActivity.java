@@ -77,6 +77,21 @@ public class CarSelectionActivity extends BaseActivity {
         startActivityForResult(intent, REQUEST_CODE_BUILT_YEAR);
     }
 
+    @OnClick(R.id.btn_select_car)
+    public void OnSelectCar() {
+
+        if (!validate()) {
+            return;
+        }
+
+        Intent intent = new Intent(getApplicationContext(), SummaryActivity.class);
+        intent.putExtra(CarTypesDialogActivity.INTENT_EXTRA, manufacturer);
+        intent.putExtra(MainTypesDialogActivity.INTENT_EXTRA, model);
+        intent.putExtra(BuiltDatesDialogActivity.INTENT_EXTRA, builtDate);
+
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -100,12 +115,15 @@ public class CarSelectionActivity extends BaseActivity {
     public void setManufacturer(Manufacturer manufacturer) {
         this.manufacturer = manufacturer;
         mEditCarType.setText(manufacturer.getManufacturerName());
+        model = null;
+        builtDate = null;
         mEditMainType.setText(null);
         mEditBuiltDate.setText(null);
     }
 
     public void setModel(Model model) {
         this.model = model;
+        builtDate = null;
         mEditMainType.setText(model.getModelName());
         mEditBuiltDate.setText(null);
     }
@@ -113,5 +131,23 @@ public class CarSelectionActivity extends BaseActivity {
     public void setBuiltDate(BuiltDate builtDate) {
         this.builtDate = builtDate;
         mEditBuiltDate.setText(builtDate.getYear());
+    }
+
+    private boolean validate() {
+        if (manufacturer == null) {
+            mEditCarType.requestFocus();
+            mEditCarType.setError(getString(R.string.select_manufacturer));
+            return false;
+        } else if (model == null) {
+            mEditMainType.requestFocus();
+            mEditMainType.setError(getString(R.string.select_model));
+            return false;
+        } else if (builtDate == null) {
+            mEditBuiltDate.requestFocus();
+            mEditBuiltDate.setError(getString(R.string.select_year));
+            return false;
+        }
+
+        return true;
     }
 }

@@ -76,7 +76,6 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
     }
 
     private void injectDependencies() {
-
         if (getActivity() instanceof BuiltDatesDialogActivity) {
             BuiltDatesDialogActivity activity = (BuiltDatesDialogActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
@@ -87,7 +86,6 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             selectionListener = (EntitySelectionListener)getActivity();
         } catch (ClassCastException e) {
@@ -102,7 +100,7 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
         ButterKnife.bind(this, view);
 
         //Init Adapter
-        mAdapter = new BuiltDateListAdapter(null);
+        mAdapter = new BuiltDateListAdapter(new LinkedList<BuiltDate>());
 
         //Init List
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -148,19 +146,15 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
     public void addBuiltDates(BuiltDates builtDates) {
 
         List<BuiltDate> data = new LinkedList<>();
-
         int itemType = 0;
 
         for (Map.Entry<String, String> entry : builtDates.getWkda().entrySet()) {
-
             BuiltDate builtDate = new BuiltDate(itemType, entry.getKey());
             data.add(builtDate);
-
             itemType = itemType ^ 1;
         }
 
         currentPage = builtDates.getPage();
-
         mAdapter.addData(data);
 
         if (currentPage == builtDates.getTotalPageCount())

@@ -3,18 +3,20 @@
 
     <string name="loading">Loading</string>
 
-    <string name="car_type_hint">Manufacturer</string>
-    <string name="main_type_hint">Model</string>
-    <string name="built_date_hint">Year</string>
+    <string name="car_type">Manufacturer</string>
+    <string name="main_type">Model</string>
+    <string name="built_date">Year</string>
 
     <string name="select_car">Select Car</string>
 
-    <string name="select_car_type">Select Car Type</string>
-    <string name="select_main_type">Select Main Type</string>
-    <string name="select_built_date">Select Built Date</string>
+    <string name="select_manufacturer">Select manufacturer</string>
+    <string name="select_model">Select model</string>
+    <string name="select_year">Select year</string>
 
     <string name="no_car_types">Car Types Empty</string>
     <string name="no_main_types">Main Types Empty</string>
     <string name="no_built_dates">Built Dates Empty</string>
+
+    <string name="summary">Summary</string>
 
 </resources>
