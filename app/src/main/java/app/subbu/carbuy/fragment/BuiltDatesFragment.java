@@ -167,6 +167,10 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
 
     @Override
     public void showLoading() {
+
+        if (!isAdded())
+            return;
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -180,6 +184,10 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
 
     @Override
     public void showEmpty() {
+
+        if (!isAdded())
+            return;
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -193,6 +201,10 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
 
     @Override
     public void showBuiltDates(final BuiltDates builtDates) {
+
+        if (!isAdded())
+            return;
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -205,6 +217,10 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
 
     @Override
     public void showError(Throwable e) {
+
+        if (!isAdded())
+            return;
+
         final ErrorUtils.ErrorType error = ErrorUtils.getErrorType(e);
 
         Runnable runnable = new Runnable() {

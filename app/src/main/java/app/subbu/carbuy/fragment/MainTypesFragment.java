@@ -162,6 +162,10 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
 
     @Override
     public void showLoading() {
+
+        if (!isAdded())
+            return;
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -175,6 +179,10 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
 
     @Override
     public void showEmpty() {
+
+        if (!isAdded())
+            return;
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -200,6 +208,10 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
 
     @Override
     public void showError(Throwable e) {
+
+        if (!isAdded())
+            return;
+
         final ErrorUtils.ErrorType error = ErrorUtils.getErrorType(e);
 
         Runnable runnable = new Runnable() {
