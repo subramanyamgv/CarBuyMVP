@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import app.subbu.carbuy.R;
-import app.subbu.carbuy.activity.CarTypesDialogActivity;
+import app.subbu.carbuy.activity.CarTypesActivity;
 import app.subbu.carbuy.activity.EntitySelectionListener;
 import app.subbu.carbuy.adapter.CarTypesListAdapter;
 import app.subbu.carbuy.entity.Manufacturer;
@@ -72,8 +72,8 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     }
 
     private void injectDependencies() {
-        if (getActivity() instanceof CarTypesDialogActivity) {
-            CarTypesDialogActivity activity = (CarTypesDialogActivity) getActivity();
+        if (getActivity() instanceof CarTypesActivity) {
+            CarTypesActivity activity = (CarTypesActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
             carSelectionComponent.inject(this);
         }
@@ -106,6 +106,8 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
             }
         });
 
+        mPresenter.getCarTypes(0, Repository.DEFAULT_PAGE_SIZE);
+
         return view;
     }
 
@@ -118,7 +120,6 @@ public class CarTypesFragment extends Fragment implements CarTypesView,
     public void onStart() {
         super.onStart();
         mPresenter.onStart();
-        mPresenter.getCarTypes(0, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override

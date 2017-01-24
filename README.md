@@ -2,7 +2,7 @@
 Car buy application using MVP, Retrofit2, RxJava2, Dagger2
 
 ## Screenshots
-![](http://i.imgur.com/XbplWwI.png)
+![](http://i.imgur.com/5pLjejl.png)
 
 ## Model-View-Presenter ([mvp](https://github.com/subramanyamgv/CarBuyMVP/tree/master/mvp))
 Java module with no Android dependencies. It contains following packages:

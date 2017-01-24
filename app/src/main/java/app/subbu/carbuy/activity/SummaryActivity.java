@@ -45,13 +45,13 @@ public class SummaryActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState != null) {
-            mManufacturer = savedInstanceState.getParcelable(CarTypesDialogActivity.INTENT_EXTRA);
-            mModel = savedInstanceState.getParcelable(MainTypesDialogActivity.INTENT_EXTRA);
-            mBuiltDate = savedInstanceState.getParcelable(BuiltDatesDialogActivity.INTENT_EXTRA);
+            mManufacturer = savedInstanceState.getParcelable(CarTypesActivity.INTENT_EXTRA);
+            mModel = savedInstanceState.getParcelable(MainTypesActivity.INTENT_EXTRA);
+            mBuiltDate = savedInstanceState.getParcelable(BuiltDatesActivity.INTENT_EXTRA);
         } else {
-            mManufacturer = getIntent().getParcelableExtra(CarTypesDialogActivity.INTENT_EXTRA);
-            mModel = getIntent().getParcelableExtra(MainTypesDialogActivity.INTENT_EXTRA);
-            mBuiltDate = getIntent().getParcelableExtra(BuiltDatesDialogActivity.INTENT_EXTRA);
+            mManufacturer = getIntent().getParcelableExtra(CarTypesActivity.INTENT_EXTRA);
+            mModel = getIntent().getParcelableExtra(MainTypesActivity.INTENT_EXTRA);
+            mBuiltDate = getIntent().getParcelableExtra(BuiltDatesActivity.INTENT_EXTRA);
         }
 
         mTxtCarType.setText(mManufacturer.getManufacturerName());

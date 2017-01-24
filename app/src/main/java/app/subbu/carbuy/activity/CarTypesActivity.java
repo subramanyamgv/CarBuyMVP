@@ -7,10 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import app.subbu.carbuy.R;
-import app.subbu.carbuy.entity.BuiltDate;
 import app.subbu.carbuy.entity.Manufacturer;
-import app.subbu.carbuy.entity.Model;
-import app.subbu.carbuy.fragment.BuiltDatesFragment;
+import app.subbu.carbuy.fragment.CarTypesFragment;
 import app.subbu.carbuy.injector.component.CarSelectionComponent;
 import app.subbu.carbuy.injector.component.DaggerCarSelectionComponent;
 import app.subbu.carbuy.injector.module.CarSelectionModule;
@@ -21,16 +19,14 @@ import butterknife.ButterKnife;
  * Created by Subramanyam on 22-Jan-2017.
  */
 
-public class BuiltDatesDialogActivity extends BaseActivity implements EntitySelectionListener<BuiltDate> {
+public class CarTypesActivity extends BaseActivity implements EntitySelectionListener<Manufacturer> {
 
-    public static final String INTENT_EXTRA = "year";
+    public static final String INTENT_EXTRA = "manufacturer";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     private CarSelectionComponent mCarSelectionComponent;
-    private Manufacturer mManufacturer;
-    private Model mModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,27 +39,12 @@ public class BuiltDatesDialogActivity extends BaseActivity implements EntitySele
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState != null) {
-            mManufacturer = savedInstanceState.getParcelable(CarTypesDialogActivity.INTENT_EXTRA);
-            mModel = savedInstanceState.getParcelable(MainTypesDialogActivity.INTENT_EXTRA);
-        } else {
-            mManufacturer = getIntent().getParcelableExtra(CarTypesDialogActivity.INTENT_EXTRA);
-            mModel = getIntent().getParcelableExtra(MainTypesDialogActivity.INTENT_EXTRA);
-        }
-
         mCarSelectionComponent = DaggerCarSelectionComponent.builder()
                 .applicationComponent(mAppComponent)
                 .carSelectionModule(new CarSelectionModule())
                 .build();
 
-        BuiltDatesFragment.start(R.id.container, getSupportFragmentManager(), mManufacturer, mModel);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(CarTypesDialogActivity.INTENT_EXTRA, mManufacturer);
-        outState.putParcelable(MainTypesDialogActivity.INTENT_EXTRA, mModel);
-        super.onSaveInstanceState(outState);
+        CarTypesFragment.start(R.id.container, getSupportFragmentManager());
     }
 
     @Override
@@ -80,10 +61,10 @@ public class BuiltDatesDialogActivity extends BaseActivity implements EntitySele
     }
 
     @Override
-    public void onEntitySelected(BuiltDate data) {
-        Intent result = new Intent();
-        result.putExtra(INTENT_EXTRA, data);
-        setResult(RESULT_OK, result);
-        finish();;
+    public void onEntitySelected(Manufacturer data) {
+        Intent intent = new Intent(getApplicationContext(), MainTypesActivity.class);
+        intent.putExtra(CarTypesActivity.INTENT_EXTRA, data);
+
+        startActivity(intent);
     }
 }

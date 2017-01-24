@@ -1,8 +1,8 @@
 package app.subbu.carbuy.injector.component;
 
-import app.subbu.carbuy.activity.BuiltDatesDialogActivity;
-import app.subbu.carbuy.activity.CarTypesDialogActivity;
-import app.subbu.carbuy.activity.MainTypesDialogActivity;
+import app.subbu.carbuy.activity.BuiltDatesActivity;
+import app.subbu.carbuy.activity.CarTypesActivity;
+import app.subbu.carbuy.activity.MainTypesActivity;
 import app.subbu.carbuy.fragment.BuiltDatesFragment;
 import app.subbu.carbuy.fragment.CarTypesFragment;
 import app.subbu.carbuy.fragment.MainTypesFragment;
@@ -18,12 +18,12 @@ import dagger.Component;
         modules = {CarSelectionModule.class})
 public interface CarSelectionComponent {
 
-    void inject(CarTypesDialogActivity activity);
+    void inject(CarTypesActivity activity);
     void inject(CarTypesFragment fragment);
 
-    void inject(MainTypesDialogActivity activity);
+    void inject(MainTypesActivity activity);
     void inject(MainTypesFragment fragment);
 
-    void inject(BuiltDatesDialogActivity activity);
+    void inject(BuiltDatesActivity activity);
     void inject(BuiltDatesFragment fragment);
 }

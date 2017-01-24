@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import app.subbu.carbuy.R;
-import app.subbu.carbuy.activity.BuiltDatesDialogActivity;
+import app.subbu.carbuy.activity.BuiltDatesActivity;
 import app.subbu.carbuy.activity.EntitySelectionListener;
 import app.subbu.carbuy.adapter.BuiltDateListAdapter;
 import app.subbu.carbuy.entity.BuiltDate;
@@ -78,8 +78,8 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
     }
 
     private void injectDependencies() {
-        if (getActivity() instanceof BuiltDatesDialogActivity) {
-            BuiltDatesDialogActivity activity = (BuiltDatesDialogActivity) getActivity();
+        if (getActivity() instanceof BuiltDatesActivity) {
+            BuiltDatesActivity activity = (BuiltDatesActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
             carSelectionComponent.inject(this);
         }
@@ -121,6 +121,9 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
                 selectionListener.onEntitySelected(builtDate);
             }
         });
+		
+		mPresenter.getBuiltDates(mModel.getModelId(), mManufacturer.getManufacturerId(),
+                0, Repository.DEFAULT_PAGE_SIZE);
 
         return view;
     }
@@ -135,8 +138,6 @@ public class BuiltDatesFragment extends Fragment implements BuiltDatesView,
     public void onStart() {
         super.onStart();
         mPresenter.onStart();
-        mPresenter.getBuiltDates(mModel.getModelId(), mManufacturer.getManufacturerId(),
-                0, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override

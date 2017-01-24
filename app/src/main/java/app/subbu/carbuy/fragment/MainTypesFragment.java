@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import app.subbu.carbuy.R;
 import app.subbu.carbuy.activity.EntitySelectionListener;
-import app.subbu.carbuy.activity.MainTypesDialogActivity;
+import app.subbu.carbuy.activity.MainTypesActivity;
 import app.subbu.carbuy.adapter.MainTypesListAdapter;
 import app.subbu.carbuy.entity.Manufacturer;
 import app.subbu.carbuy.entity.Model;
@@ -75,8 +75,8 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
     }
 
     private void injectDependencies() {
-        if (getActivity() instanceof MainTypesDialogActivity) {
-            MainTypesDialogActivity activity = (MainTypesDialogActivity) getActivity();
+        if (getActivity() instanceof MainTypesActivity) {
+            MainTypesActivity activity = (MainTypesActivity) getActivity();
             CarSelectionComponent carSelectionComponent = activity.getCarSelectionComponent();
             carSelectionComponent.inject(this);
         }
@@ -109,6 +109,8 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
             }
         });
 
+        mPresenter.getMainTypes(mManufacturer.getManufacturerId(), 0, Repository.DEFAULT_PAGE_SIZE);
+
         return view;
     }
 
@@ -122,7 +124,6 @@ public class MainTypesFragment extends Fragment implements MainTypesView,
     public void onStart() {
         super.onStart();
         mPresenter.onStart();
-        mPresenter.getMainTypes(mManufacturer.getManufacturerId(), 0, Repository.DEFAULT_PAGE_SIZE);
     }
 
     @Override

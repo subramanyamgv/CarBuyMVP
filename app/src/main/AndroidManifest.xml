@@ -20,20 +20,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.CarTypesDialogActivity"
+        <activity android:name=".activity.CarTypesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/select_manufacturer"
-            android:theme="@style/AppTheme.Dialog" />
+            android:label="@string/select_manufacturer" />
 
-        <activity android:name=".activity.MainTypesDialogActivity"
+        <activity android:name=".activity.MainTypesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/select_model"
-            android:theme="@style/AppTheme.Dialog" />
+            android:label="@string/select_model" />
 
-        <activity android:name=".activity.BuiltDatesDialogActivity"
+        <activity android:name=".activity.BuiltDatesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/select_year"
-            android:theme="@style/AppTheme.Dialog" />
+            android:label="@string/select_year"/>
 
         <activity android:name=".activity.SummaryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
