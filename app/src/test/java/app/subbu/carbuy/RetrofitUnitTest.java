@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class RetrofitUnitTest {
 
+
     @Test
     void testCarTypesApi() throws Exception {
 

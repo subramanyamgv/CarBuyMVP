@@ -68,4 +68,11 @@ public class SummaryActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(CarTypesActivity.INTENT_EXTRA, mManufacturer);
+        outState.putParcelable(MainTypesActivity.INTENT_EXTRA, mModel);
+        outState.putParcelable(BuiltDatesActivity.INTENT_EXTRA, mBuiltDate);
+        super.onSaveInstanceState(outState);
+    }
 }
