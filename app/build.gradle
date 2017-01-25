@@ -35,29 +35,27 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':mvp')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile(libraries.expressoCore, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    testCompile 'junit:junit:4.12'
+
+    compile libraries.appCompact
+    compile libraries.design
+    testCompile libraries.junit
 
     //Butterknife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile libraries.butterknife
+    annotationProcessor libraries.butterknifeCompiler
 
-    //Dagger2
-    compile 'com.google.dagger:dagger:2.8'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+    //Dagger
+    compile libraries.dagger
+    annotationProcessor libraries.daggerCompiler
 
     //Retrofit2
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
-
-    //RxAndroid
-    compile group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.0.1'
+    compile libraries.retrofit
+    compile libraries.retrofitConverterGson
+    compile libraries.retrofitRxJava2Adapter
 
     //RecyclerView Adapter
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.7.8'
+    compile libraries.recyclerViewAdapter
 }
